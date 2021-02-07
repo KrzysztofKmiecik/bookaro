@@ -1,10 +1,10 @@
 package pl.sztukakodu.bookaro;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import pl.sztukakodu.bookaro.domain.Book;
+import pl.sztukakodu.bookaro.domain.CatalogService;
 
 import java.util.List;
 
@@ -16,9 +16,8 @@ public class BookaroApplication implements CommandLineRunner {
     }
 
 
-
-
     private final CatalogService catalogService;
+
 
     BookaroApplication(CatalogService catalogService){
         this.catalogService=catalogService;

@@ -1,4 +1,4 @@
-package pl.sztukakodu.bookaro;
+package pl.sztukakodu.bookaro.domain;
 
 import java.util.StringJoiner;
 
