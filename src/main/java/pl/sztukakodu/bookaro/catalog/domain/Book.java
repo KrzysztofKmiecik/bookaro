@@ -1,6 +1,8 @@
 package pl.sztukakodu.bookaro.catalog.domain;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 
 @RequiredArgsConstructor

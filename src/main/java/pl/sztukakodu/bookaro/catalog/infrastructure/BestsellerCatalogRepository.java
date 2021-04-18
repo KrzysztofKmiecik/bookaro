@@ -1,6 +1,5 @@
 package pl.sztukakodu.bookaro.catalog.infrastructure;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import pl.sztukakodu.bookaro.catalog.domain.Book;
 import pl.sztukakodu.bookaro.catalog.domain.CatalogRepository;
@@ -15,8 +14,8 @@ class BestsellerCatalogRepository implements CatalogRepository {
     private final Map<Long, Book> storage = new ConcurrentHashMap<>();
 
 
-    public BestsellerCatalogRepository(){
-        storage.put(1L, new Book(1L,"Pan Potter i Komnata Tajemnic","JK Rowling",1998));
+    public BestsellerCatalogRepository() {
+        storage.put(1L, new Book(1L, "Pan Potter i Komnata Tajemnic", "JK Rowling", 1998));
         storage.put(2L, new Book(2L, "władca Pierścieni: Dwie Wieże", "JRR Tolkien", 1954));
         storage.put(3L, new Book(3L, "Mężczyźni, którzy nienawidzą kobiet", "Stieg Larson", 2005));
         storage.put(4L, new Book(4L, "Sezon burz", "Andrzej Sapkowski", 2013));
