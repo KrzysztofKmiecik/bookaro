@@ -1,11 +1,8 @@
-package pl.sztukakodu.bookaro.domain;
+package pl.sztukakodu.bookaro.catalog.domain;
 
 import org.springframework.stereotype.Service;
-import pl.sztukakodu.bookaro.domain.Book;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service

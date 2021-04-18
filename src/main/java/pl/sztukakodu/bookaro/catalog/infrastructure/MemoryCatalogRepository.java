@@ -1,8 +1,8 @@
-package pl.sztukakodu.bookaro.infrastructure;
+package pl.sztukakodu.bookaro.catalog.infrastructure;
 
 import org.springframework.stereotype.Repository;
-import pl.sztukakodu.bookaro.domain.Book;
-import pl.sztukakodu.bookaro.domain.CatalogRepository;
+import pl.sztukakodu.bookaro.catalog.domain.Book;
+import pl.sztukakodu.bookaro.catalog.domain.CatalogRepository;
 
 import java.util.ArrayList;
 import java.util.List;

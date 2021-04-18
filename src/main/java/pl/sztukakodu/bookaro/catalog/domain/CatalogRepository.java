@@ -1,4 +1,4 @@
-package pl.sztukakodu.bookaro.domain;
+package pl.sztukakodu.bookaro.catalog.domain;
 
 import java.util.List;
 
