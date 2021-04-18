@@ -13,7 +13,11 @@ import java.util.List;
 public class CatalogController {
     private final CatalogService catalogService;
 
-    public List<Book> findByTitle(String title){
+    public List<Book> findByTitle(String title) {
         return catalogService.findByTitle(title);
+    }
+
+    public List<Book> findByAuthor(String author) {
+        return catalogService.findByAuthor(author);
     }
 }

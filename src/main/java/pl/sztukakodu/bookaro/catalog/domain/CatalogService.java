@@ -1,6 +1,5 @@
 package pl.sztukakodu.bookaro.catalog.domain;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -24,4 +23,11 @@ public class CatalogService {
                 .collect(Collectors.toList());
     }
 
+
+    public List<Book> findByAuthor(String author) {
+        return repository.findAll()
+                .stream()
+                .filter(book -> book.getAuthor().contains(author))
+                .collect(Collectors.toList());
+    }
 }

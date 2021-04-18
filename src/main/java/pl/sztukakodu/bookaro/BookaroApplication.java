@@ -3,6 +3,7 @@ package pl.sztukakodu.bookaro;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class BookaroApplication {
@@ -25,4 +26,11 @@ public class BookaroApplication {
         }
 
     }*/
+
+
+    /*@Bean
+    String query() {
+        return "Pan";
+    }*/
+
 }
