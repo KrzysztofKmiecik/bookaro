@@ -3,37 +3,52 @@ package pl.sztukakodu.bookaro;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import pl.sztukakodu.bookaro.catalog.application.CatalogController;
+import pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase;
 import pl.sztukakodu.bookaro.catalog.domain.Book;
 
 import java.util.List;
 
+import static pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase.*;
+
 @Component
 public class ApplicationStartup implements CommandLineRunner {
 
-    private final CatalogController catalogController;
+    private final CatalogUseCase catalog;
     private final String query;
     private final Long limit;
 
-    public ApplicationStartup(CatalogController catalogController,
+    public ApplicationStartup(CatalogUseCase catalog,
                               @Value("${bookaro.catalog.query}") String query,
-                              @Value("${bookaro.catalog.limit:1}") Long limit) {
-        this.catalogController = catalogController;
+                              @Value("${bookaro.catalog.limit:15}") Long limit) {
+        this.catalog = catalog;
         this.query = query;
         this.limit = limit;
 
     }
 
     @Override
-    public void run(String... args){
-        List<Book> byTitle = catalogController.findByTitle(query);
+    public void run(String... args) {
+        init();
+        findByTitle();
+    }
+
+    private void init() {
+
+        catalog.addBook(new CreateBookCommand("Pan Tadeusz", "Adam Mickiewicz", 1970));
+        catalog.addBook(new CreateBookCommand("Ogniem i mieczem", "Adam Mickiewicz", 1940));
+        catalog.addBook(new CreateBookCommand("Chlopi", "Adam Mickiewicz", 1940));
+        catalog.addBook(new CreateBookCommand("Pan Wolodyjowski", "Adam Mickiewicz", 1940));
+    }
+
+    private void findByTitle() {
+        List<Book> byTitle = catalog.findByTitle(query);
         if (byTitle.size() > 0) {
             byTitle.stream().limit(limit).forEach(System.out::println);
         } else {
             System.out.println("Nie znaleziono w tytułach");
         }
 
-        List<Book> byAuthor = catalogController.findByAuthor(query);
+        List<Book> byAuthor = catalog.findByAuthor(query);
         if (byAuthor.size() > 0) {
             byAuthor.stream().limit(limit).forEach(System.out::println);
         } else {

@@ -27,7 +27,7 @@ public class BookaroApplication {
     }*/
 
 
-    /*@Bean
+    /*@Bean  tak nie wstrzykujemy typow prostych -> lepiej przez properties
     String query() {
         return "Pan";
     }*/
