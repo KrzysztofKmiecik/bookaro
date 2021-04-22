@@ -8,7 +8,8 @@ import pl.sztukakodu.bookaro.catalog.domain.Book;
 
 import java.util.List;
 
-import static pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase.*;
+import static pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase.CreateBookCommand;
+import static pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase.UpdateBookCommand;
 
 @Component
 public class ApplicationStartup implements CommandLineRunner {
@@ -30,12 +31,28 @@ public class ApplicationStartup implements CommandLineRunner {
     public void run(String... args) {
         init();
         findByTitle();
+        findAndUpdate();
+        findByTitle();
+    }
+
+    private void findAndUpdate() {
+        System.out.println("Updating.....");
+        catalog.findOneByTitleAndAuthor("Pan Ogniem i mieczem", "Adam Mickiewicz")
+                .ifPresent(book -> {
+                    UpdateBookCommand command = new UpdateBookCommand(
+                            book.getId(),
+                            "Pan Ogniem i Mieczem i Cyrklem",
+                            book.getAuthor(),
+                            book.getYear()
+                    );
+                    catalog.updateBook(command);
+                });
     }
 
     private void init() {
 
         catalog.addBook(new CreateBookCommand("Pan Tadeusz", "Adam Mickiewicz", 1970));
-        catalog.addBook(new CreateBookCommand("Ogniem i mieczem", "Adam Mickiewicz", 1940));
+        catalog.addBook(new CreateBookCommand("Pan Ogniem i mieczem", "Adam Mickiewicz", 1940));
         catalog.addBook(new CreateBookCommand("Chlopi", "Adam Mickiewicz", 1940));
         catalog.addBook(new CreateBookCommand("Pan Wolodyjowski", "Adam Mickiewicz", 1940));
     }
