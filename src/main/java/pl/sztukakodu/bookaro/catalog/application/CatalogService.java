@@ -6,7 +6,6 @@ import pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase;
 import pl.sztukakodu.bookaro.catalog.domain.Book;
 import pl.sztukakodu.bookaro.catalog.domain.CatalogRepository;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +32,14 @@ class CatalogService implements CatalogUseCase {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Optional<Book> findOneByTitle(String title) {
+        return repository.findAll()
+                .stream()
+                .filter(book -> book.getTitle().startsWith(title))
+                .findFirst();
+    }
+
 
     @Override
     public List<Book> findByAuthor(String author) {
@@ -54,12 +61,8 @@ class CatalogService implements CatalogUseCase {
 
     @Override
     public void addBook(CreateBookCommand command) {
-
-        //walidacja parametrow wejsciowych przed utworzeniem obiektu
-        Book book = new Book(command.getTitle(), command.getAuthor(), command.getYear());
-
+        Book book = command.toBook();
         repository.save(book);
-
     }
 
     @Override
@@ -72,10 +75,8 @@ class CatalogService implements CatalogUseCase {
     public UpdateBookResponse updateBook(UpdateBookCommand command) {
         return repository.findById(command.getId())
                 .map(book -> {
-                    book.setTitle(command.getTitle());
-                    book.setAuthor(command.getAuthor());
-                    book.setYear(command.getYear());
-                    repository.save(book);
+                    Book updatedBook = command.updateFields(book);
+                    repository.save(updatedBook);
                     return UpdateBookResponse.SUCCESS;
                 })
                 .orElseGet(() -> new UpdateBookResponse(false, Collections.singletonList("Book not found with id: " + command.getId())));
