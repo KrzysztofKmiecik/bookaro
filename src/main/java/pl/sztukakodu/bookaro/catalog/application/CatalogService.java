@@ -8,6 +8,7 @@ import pl.sztukakodu.bookaro.catalog.domain.CatalogRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,10 +26,15 @@ class CatalogService implements CatalogUseCase {
     }
 
     @Override
+    public Optional<Book> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
     public List<Book> findByTitle(String title) {
         return repository.findAll()
                 .stream()
-                .filter(book -> book.getTitle().startsWith(title))
+                .filter(book -> book.getTitle().toLowerCase().startsWith(title.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -36,7 +42,7 @@ class CatalogService implements CatalogUseCase {
     public Optional<Book> findOneByTitle(String title) {
         return repository.findAll()
                 .stream()
-                .filter(book -> book.getTitle().startsWith(title))
+                .filter(book -> book.getTitle().toLowerCase().startsWith(title.toLowerCase()))
                 .findFirst();
     }
 
@@ -45,7 +51,7 @@ class CatalogService implements CatalogUseCase {
     public List<Book> findByAuthor(String author) {
         return repository.findAll()
                 .stream()
-                .filter(book -> book.getAuthor().contains(author))
+                .filter(book -> book.getAuthor().toLowerCase().contains(author.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
@@ -54,8 +60,8 @@ class CatalogService implements CatalogUseCase {
 
         return repository.findAll()
                 .stream()
-                .filter(book -> book.getTitle().startsWith(title))
-                .filter(book -> book.getAuthor().startsWith(author))
+                .filter(book -> book.getTitle().toLowerCase().startsWith(title.toLowerCase()))
+                .filter(book -> book.getAuthor().toLowerCase().startsWith(author.toLowerCase()))
                 .findFirst();
     }
 
@@ -81,4 +87,5 @@ class CatalogService implements CatalogUseCase {
                 })
                 .orElseGet(() -> new UpdateBookResponse(false, Collections.singletonList("Book not found with id: " + command.getId())));
     }
+
 }
