@@ -14,11 +14,15 @@ public interface CatalogUseCase {
 
     List<Book> findByTitle(String title);
 
-    Optional<Book> findOneByTitle(String title);
-
     List<Book> findByAuthor(String author);
 
+    Optional<Book> findOneByTitle(String title);
+
+    Optional<Book> findOneByAuthor(String author);
+
     Optional<Book> findOneByTitleAndAuthor(String title, String author);
+
+    List<Book> findByTitleAndAuthor(String title, String author);
 
     void addBook(CreateBookCommand command);
 
@@ -35,8 +39,8 @@ public interface CatalogUseCase {
         Integer year;
         BigDecimal price;
 
-       public Book toBook(){
-            return new Book(title,author,year,price);
+        public Book toBook() {
+            return new Book(title, author, year, price);
         }
 
     }
