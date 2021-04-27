@@ -2,16 +2,21 @@ package pl.sztukakodu.bookaro.catalog.web;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase;
 import pl.sztukakodu.bookaro.catalog.domain.Book;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase.CreateBookCommand;
 
 @RequestMapping("/catalog")
 @RestController
@@ -24,7 +29,7 @@ public class CatalogController {
     public List<Book> getAll(
             @RequestParam Optional<String> title,
             @RequestParam Optional<String> author,
-            @RequestParam (defaultValue = "10") int limit) {
+            @RequestParam(defaultValue = "10") int limit) {
 
         if (title.isPresent() && author.isPresent()) {
             return catalog.findByTitleAndAuthor(title.get(), author.get());
@@ -34,7 +39,6 @@ public class CatalogController {
             return catalog.findByAuthor(author.get());
         }
         return catalog.findAll().stream().limit(limit).collect(Collectors.toList());
-
 
     }
 
@@ -46,6 +50,39 @@ public class CatalogController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> addBook(@RequestBody RestCreateBookCommand command) {
+        Book book = catalog.addBook(command.toCommand());
+        URI uri = createdBookUri(book);
+        return ResponseEntity.created(uri).build();
+    }
 
+    private URI createdBookUri(Book book) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/" + book.getId().toString())
+                .build()
+                .toUri();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable  Long id){
+        catalog.removeById(id);
+    }
+
+    @Data
+    private static class RestCreateBookCommand {
+        private String title;
+        private String author;
+        private Integer year;
+        private BigDecimal price;
+
+        CreateBookCommand toCommand() {
+            return new CreateBookCommand(title, author, year, price);
+        }
+
+    }
 
 }
