@@ -10,6 +10,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.sztukakodu.bookaro.catalog.application.port.CatalogUseCase;
 import pl.sztukakodu.bookaro.catalog.domain.Book;
 
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
@@ -52,7 +56,7 @@ public class CatalogController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addBook(@RequestBody RestCreateBookCommand command) {
+    public ResponseEntity<Void> addBook(@Valid @RequestBody RestCreateBookCommand command) {
         Book book = catalog.addBook(command.toCommand());
         URI uri = createdBookUri(book);
         return ResponseEntity.created(uri).build();
@@ -66,17 +70,27 @@ public class CatalogController {
                 .toUri();
     }
 
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable  Long id){
+    public void deleteBook(@PathVariable Long id) {
         catalog.removeById(id);
     }
 
     @Data
     private static class RestCreateBookCommand {
+
+        @NotBlank(message = "Please provide a title")
         private String title;
+
+        @NotBlank(message = "Please provide an author")
         private String author;
+
+        @NotNull
         private Integer year;
+
+        @NotNull
+        @DecimalMin("0.00")
         private BigDecimal price;
 
         CreateBookCommand toCommand() {
