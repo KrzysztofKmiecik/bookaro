@@ -86,6 +86,12 @@ public class CatalogController {
 
     }
 
+    @DeleteMapping("/{id}/cover")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeBookCover(@PathVariable Long id){
+        catalog.removeCoverById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> addBook(@Valid @RequestBody CatalogController.RestBookCommand command) {

@@ -11,7 +11,6 @@ import pl.sztukakodu.bookaro.uploads.domain.Upload;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,6 +43,18 @@ class CatalogService implements CatalogUseCase {
                     repository.save(book);
                 });
 
+    }
+
+    @Override
+    public void removeCoverById(Long id) {
+        repository.findById(id)
+                .ifPresent(book -> {
+                    if (book.getCoverId() != null) {
+                        upload.removeById(book.getCoverId());
+                        book.setCoverId(null);
+                        repository.save(book);
+                    }
+                });
     }
 
     @Override
