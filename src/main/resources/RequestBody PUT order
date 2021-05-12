@@ -1,0 +1,35 @@
+{
+
+    "items": [
+        {
+            "book": {
+                "id": 0,
+                "title": "OLA",
+                "author": "Adam Mickiewicz",
+                "year": 1970,
+                "price": 234,
+                "coverId": null
+            },
+            "quantity": 16
+        },
+        {
+            "book": {
+                "id": 2,
+                "title": "Chlopi",
+                "author": "Adam Mickiewicz",
+                "year": 1940,
+                "price": 11.34,
+                "coverId": null
+            },
+            "quantity": 7
+        }
+    ],
+    "recipient": {
+        "name": "aaaaaaa",
+        "phone": "234423424",
+        "street": "Wiejska 55",
+        "city": "Gdańsk",
+        "zipCode": "12-123",
+        "email": "franek@wp.pl"
+    }
+}

@@ -57,10 +57,32 @@ public class CatalogController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Book> getById(@PathVariable Long id) {
         return catalog.findById(id)
-                .map(book -> ResponseEntity.ok(book))
+                .map(book->ResponseEntity.ok(book))
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> addBook(@Valid @RequestBody RestBookCommand command) {
+        Book book = catalog.addBook(command.toCreateCommand());
+        URI uri = createdBookUri(book);
+        return ResponseEntity.created(uri).build();
+    }
+
+    private URI createdBookUri(Book book) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/" + book.getId().toString())
+                .build()
+                .toUri();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable Long id) {
+        catalog.removeById(id);
+    }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -72,6 +94,8 @@ public class CatalogController {
         }
 
     }
+
+
 
     @PutMapping(value = "/{id}/cover",consumes ={MediaType.MULTIPART_FORM_DATA_VALUE} )
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -93,28 +117,9 @@ public class CatalogController {
         catalog.removeCoverById(id);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addBook(@Valid @RequestBody CatalogController.RestBookCommand command) {
-        Book book = catalog.addBook(command.toCreateCommand());
-        URI uri = createdBookUri(book);
-        return ResponseEntity.created(uri).build();
-    }
-
-    private URI createdBookUri(Book book) {
-        return ServletUriComponentsBuilder
-                .fromCurrentRequestUri()
-                .path("/" + book.getId().toString())
-                .build()
-                .toUri();
-    }
 
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable Long id) {
-        catalog.removeById(id);
-    }
+
 
     @Data
     private static class RestBookCommand {

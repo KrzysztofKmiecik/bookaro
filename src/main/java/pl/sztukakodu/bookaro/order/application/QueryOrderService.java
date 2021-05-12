@@ -20,4 +20,9 @@ class QueryOrderService implements QueryOrderUseCase {
         return repository.findAll();
     }
 
+    @Override
+    public Optional<Order> findById(Long id) {
+        return repository.findById(id);
+    }
+
 }
