@@ -7,19 +7,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.sztukakodu.bookaro.order.application.port.ManipulateOrderUseCase;
 import pl.sztukakodu.bookaro.order.application.port.PlaceOrderUseCase;
 import pl.sztukakodu.bookaro.order.application.port.QueryOrderUseCase;
-import pl.sztukakodu.bookaro.order.application.port.ManipulateOrderUseCase;
 import pl.sztukakodu.bookaro.order.domain.Order;
 import pl.sztukakodu.bookaro.order.domain.OrderItem;
+import pl.sztukakodu.bookaro.order.domain.OrderStatus;
 import pl.sztukakodu.bookaro.order.domain.Recipient;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.net.URI;
 import java.util.List;
 
-import static pl.sztukakodu.bookaro.order.application.port.ManipulateOrderUseCase.*;
+import static pl.sztukakodu.bookaro.order.application.port.ManipulateOrderUseCase.UpdateOrderCommand;
+import static pl.sztukakodu.bookaro.order.application.port.ManipulateOrderUseCase.UpdateOrderResponse;
 import static pl.sztukakodu.bookaro.order.application.port.PlaceOrderUseCase.PlaceOrderCommand;
 import static pl.sztukakodu.bookaro.order.application.port.PlaceOrderUseCase.PlaceOrderResponse;
 
@@ -68,12 +69,20 @@ public class OrderController {
 
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateOrder(@PathVariable Long id, @RequestBody RestOrderCommand command) {
         UpdateOrderResponse updateOrderResponse = manipulateOrder.updateOrder(command.toUpdateOrderCommand(id));
         if (!updateOrderResponse.isSuccess()) {
             String message = String.join(",", updateOrderResponse.getErrors());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
         }
+    }
+
+    @PutMapping("/{id}/status")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void updateStatus(@PathVariable Long id, @RequestParam OrderStatus status) {
+        manipulateOrder.updateStatus(id, status);
+
     }
 
 

@@ -18,6 +18,8 @@ public interface ManipulateOrderUseCase {
 
     UpdateOrderResponse updateOrder(UpdateOrderCommand command);
 
+    void updateStatus(Long id, OrderStatus status);
+
     @Value
     @Builder
     @AllArgsConstructor
